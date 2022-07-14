@@ -5,7 +5,7 @@ This project is for understanding the fundamentals of a MERN application. In thi
 
 ### Steps
 
-1. Created server.js file and wrote ```javascript console.log("Hello from Node.js");```
+1. Created server.js file and wrote ```bash console.log("Hello from Node.js");```
 2. Opened the terminal and wrote: ```bash node server.js``` --> that gave us the output
 
 3. wrote: ```bash npm init -y``` --> That created a package.json which will keep track of all dependencies
