@@ -20,31 +20,20 @@ app.get("/", async (req, res) => {
   // find() method will return all the data from the collection by that return value is difficult for us to read
   // So we converted it into an array for our convenience
 
-  // let's console.log the output
-  console.log(allCats);
-
-  res.send("Welcome to the Homepage!");
+  // Now instead of console.log let's display the fetched data on the homepage
+  res.send(`<h1>Welcome to the Homepage</h1> ${allCats.map(cat => `<p>${cat.name} - ${cat.breed}</p>`).join('')}`);
 });
 
 /*
-Here is the response in the console:
-[
-  {
-    _id: new ObjectId("62d02cb387a5024dadb0b3b0"),
-    name: 'Dustin',
-    breed: 'Birman'
-  },
-  {
-    _id: new ObjectId("62d02d9e87a5024dadb0b3b1"),
-    name: 'Steve',
-    breed: 'Manie Coon'
-  },
-  {
-    _id: new ObjectId("62d02e2287a5024dadb0b3b2"),
-    name: 'Max',
-    breed: 'Turkish Angora'
-  }
-]
+Here is the response in the browser:
+
+Welcome to the Homepage
+Dustin - Birman
+
+Steve - Manie Coon
+
+Max - Turkish Angora
+
 */
 
 app.get("/admin", (req, res) => {
