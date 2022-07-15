@@ -27,7 +27,8 @@ app.get("/", async (req, res) => {
 
   // It's not a good thing to write HTML template inside of a send() method because it gets unmanageable with time
   // We can use a template engine called "ejs" to keep things clean
-  res.render("home");
+  res.render("home", {allCats});
+  // If we pass a parameter to this render() method, we will be able to access that into our home.ejs file
 });
 
 /*

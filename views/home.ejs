@@ -1,1 +1,19 @@
-Hello I am the homepage template
+<!-- The ejs syntax is very complex -->
+<!-- There is no alternate for ejs documentation: https://ejs.co/#docs -->
+
+<h1>Welcome to the Homepage!</h1>
+
+<ul>
+  <% allCats.forEach(function(cat) { %>
+  <li>Name: <%= cat.name %> ... Breed: <%= cat.breed %></li>
+  <% }); %>
+</ul>
+
+<!-- This will dynamically generate a page with fetched data from MongoDB -->
+<!-- The output will look like this:
+Welcome to the Homepage!
+
+Name: Dustin ... Breed: Birman
+Name: Steve ... Breed: Manie Coon
+Name: Max ... Breed: Turkish Angora 
+-->
