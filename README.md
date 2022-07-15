@@ -37,3 +37,5 @@ This project is for understanding the fundamentals of a MERN application. In thi
 22. We need to restart the server for every changes that we make. It's a tidious task. So to automate this we need to ```npm install nodemon``` This will automatically restart the server with each change that we make
 23. To setup nodemon we need to go to ```package.json``` and inside ```scripts``` we need to type the name of our server and necessary command to run that. For example we can type: ```"ourserver": "nodemon server.js"```
 24. Now we can just go to the terminal and type ```npm run ourserver``` and then nodemon will automatically restart the server for us anytime we save a change
+
+25. To get the ejs template engine we need to go to terminal and type: ```npm install ejs```

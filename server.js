@@ -12,6 +12,11 @@ let db;
 // Create an instance of express
 const app = express();
 
+// Tell express that we want to use ejs
+app.set("view engine", "ejs");
+// Also specify which folder we want to keep our templates
+app.set("views", "./views");
+
 // Let's practice querying the database when we place a get request to the homepage
 // For any task which requires to communicate with database or API we need to use async-await function
 app.get("/", async (req, res) => {
@@ -20,20 +25,15 @@ app.get("/", async (req, res) => {
   // find() method will return all the data from the collection by that return value is difficult for us to read
   // So we converted it into an array for our convenience
 
-  // Now instead of console.log let's display the fetched data on the homepage
-  res.send(`<h1>Welcome to the Homepage</h1> ${allCats.map(cat => `<p>${cat.name} - ${cat.breed}</p>`).join('')}`);
+  // It's not a good thing to write HTML template inside of a send() method because it gets unmanageable with time
+  // We can use a template engine called "ejs" to keep things clean
+  res.render("home");
 });
 
 /*
 Here is the response in the browser:
 
-Welcome to the Homepage
-Dustin - Birman
-
-Steve - Manie Coon
-
-Max - Turkish Angora
-
+Hello I am the homepage template
 */
 
 app.get("/admin", (req, res) => {
