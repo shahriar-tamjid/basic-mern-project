@@ -39,3 +39,14 @@ This project is for understanding the fundamentals of a MERN application. In thi
 24. Now we can just go to the terminal and type ```npm run ourserver``` and then nodemon will automatically restart the server for us anytime we save a change
 
 25. To get the ejs template engine we need to go to terminal and type: ```npm install ejs```
+
+26. To setup React for client side we need a bunch of packages to install. So go to terminal and type:
+```
+npm install react react-dom @babel/core @babel/preset-react babel-loader webpack webpack-cli webpack-node-externals npm-run-all
+```
+27. Among all these packages ```webpack``` is the tool that converts React syntax to plain JavaScript
+28. How do we tell webpack to do what we need to do? --> We need to create ```webpack.config.js``` file in the root directory. And by pasting some boilerplate code there will do the job
+29. Just like ```nodemon``` tracks changes into our server-side file and restarts the server whenever there is a change, the ```webpack``` will also monitor our client-side file and retranspile the browser whenever there is a change
+30. To setup webpack we need to go to ```package.json``` and inside ```scripts``` we need to type the name of our webpack and necessary command to run that. For example we can type: ```"ourwebpack": "webpack --watch"```
+31. Instead of running our client side and server side separately we can establish a command which can run them both at once. We need to go to the ```scripts``` section of the ```package.json``` file and type: ```"project": "run-p ourserver ourwebpack"```
+32. Now we can just go to the terminal and type ```npm run project``` and then both nodemon and webpack will start running

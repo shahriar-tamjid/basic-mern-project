@@ -16,6 +16,8 @@ const app = express();
 app.set("view engine", "ejs");
 // Also specify which folder we want to keep our templates
 app.set("views", "./views");
+// Making the public folder available
+app.use(express.static("public"));
 
 // Let's practice querying the database when we place a get request to the homepage
 // For any task which requires to communicate with database or API we need to use async-await function
@@ -38,7 +40,7 @@ Hello I am the homepage template
 */
 
 app.get("/admin", (req, res) => {
-  res.send("Welcome to the Admin Page!");
+  res.render("admin");
 });
 
 // Note: URL routes must be defined before we start listening to the port
