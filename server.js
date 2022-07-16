@@ -35,7 +35,6 @@ app.get("/", async (req, res) => {
 
 /*
 Here is the response in the browser:
-
 Hello I am the homepage template
 */
 
@@ -47,7 +46,7 @@ app.get("/admin", (req, res) => {
 
 // We want to keep our DB ready before visiting the site. So our async function must be called before the app starts to listen to port
 async function start() {
-  const client = new MongoClient("mongodb://root:root@localhost:27017/BasicMernApp?&authSource=admin")
+  const client = new MongoClient("mongodb://localhost:27017/BasicMernApp")
   // We need to create a new instance of MongoClient. Let's name it as "client"
   // Inside MongoClient() we need to provide the connection string
   
