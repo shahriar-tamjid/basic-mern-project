@@ -42,6 +42,19 @@ app.get("/admin", (req, res) => {
   res.render("admin");
 });
 
+// To pass the data to React code we need to get the data from database in JSON format
+app.get("/api/cats", async (req, res) => {
+  const allCats = await db.collection("cats").find().toArray();
+  res.json(allCats);
+});
+// If we go to the URL we will get raw data from the database
+/*
+In the browser:
+[{"_id":"62d27dd008168ae62602d1f4","name":"Dustin","breed":"Birman"},
+{"_id":"62d27e0d08168ae62602d1f5","name":"Steve","breed":"Manie Coon"},
+{"_id":"62d27e3408168ae62602d1f6","name":"Max","breed":"Turkish Angora"}]
+*/
+
 // Note: URL routes must be defined before we start listening to the port
 
 // We want to keep our DB ready before visiting the site. So our async function must be called before the app starts to listen to port

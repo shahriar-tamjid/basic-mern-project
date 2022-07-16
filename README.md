@@ -38,3 +38,5 @@ npm install react react-dom @babel/core @babel/preset-react babel-loader webpack
 22. To setup webpack we need to go to ```package.json``` and inside ```scripts``` we need to type the name of our webpack and necessary command to run that. For example we can type: ```"ourwebpack": "webpack --watch"```
 23. Instead of running our client side and server side separately we can establish a command which can run them both at once. We need to go to the ```scripts``` section of the ```package.json``` file and type: ```"project": "run-p ourserver ourwebpack"```
 24. Now we can just go to the terminal and type ```npm run project``` and then both nodemon and webpack will start running
+
+25. To fetch and send data from React application we can go to terminal and type: ```npm install axios```
