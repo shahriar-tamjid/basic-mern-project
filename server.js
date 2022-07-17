@@ -1,7 +1,7 @@
 // Building a basic web server
 
 // Import the MongoDB and destructure it
-const {MongoClient} = require("mongodb");
+const {MongoClient, ObjectId} = require("mongodb");
 
 // Import the Express library by requiring it
 const express = require("express");
@@ -9,6 +9,9 @@ const express = require("express");
 // Setting "upload" variable equal to "Multer" in order to upload files
 const multer = require("multer");
 const upload = multer();
+
+// Import Sanitize HTML
+const sanitizeHTML = require("sanitize-html");
 
 // Initializing db variable
 let db;
@@ -87,11 +90,17 @@ In the browser:
 */
 
 // Route to pass data to the database
-app.post("/create-cat", upload.single("photo"), async (req, res) => {
+app.post("/create-cat", upload.single("photo"), ourCleanup, async (req, res) => {
   // Before sendind data we want to check what browser is getting from its request
   console.log(req.body);
+  // Inserting data to MongoDB
+  const info = await db.collection("cats").insertOne(req.cleanData);
+  const newCat = await db.collection("cats").findOne({_id: new ObjectId(info.insertedId)})
+  // Because browser has no idea about the id and photo name
+  // So we also need to send back the newly created document back to the browser
   // Our response
-  res.send("Thank You!");
+  res.send(newCat);
+  // Now when we refresh the browser and the database we see the data has been successfully passed
 });
 
 /*
@@ -103,6 +112,20 @@ In the console we have gotten:
   breed: 'Exotic Shorthair'
 }
 */
+
+// We need a data cleanup middleware to clean our data from garbage data or malicious inputs
+function ourCleanup(req, res, next) {
+  if(typeof req.body.name != "string") req.body.name = "";
+  if(typeof req.body.breed != "string") req.body.breed = "";
+  if(typeof req.body._id != "string") req.body._id = "";
+
+  req.cleanData = {
+    name: sanitizeHTML(req.body.name.trim(), {allowedTags: [], allowedAttributes: {}}),
+    breed: sanitizeHTML(req.body.breed.trim(), {allowedTags: [], allowedAttributes: {}})
+  }
+
+  next();
+}
 
 // Note: URL routes must be defined before we start listening to the port
 

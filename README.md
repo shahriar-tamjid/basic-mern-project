@@ -45,3 +45,4 @@ npm install react react-dom @babel/core @babel/preset-react babel-loader webpack
 28. Style the UI of admin page using React in two files ```CatCard.js``` and ```CreateNewForm.js```
 
 29. Whenever we need to send files to the database we need to use a package named ```Multer``` To install it go to the terminal and type: ```npm install multer```
+30.  To cleanup data we need a package called ```Sanitize HTML``` To install it go to the terminal and type: ```npm install sanitize-html```
