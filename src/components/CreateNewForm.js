@@ -17,10 +17,11 @@ function CreateNewForm(props) {
     setBreed("");
     setFile("");
     CreatePhotoField.current.value = "";
-    const newPhoto = await Axios.post("/create-animal", data, {
+    const newPhoto = await Axios.post("/create-cat", data, {
+      // Pass data using the "create-cat" route with the help of "post" method
       headers: { "Content-Type": "multipart/form-data" },
     });
-    props.setAnimals((prev) => prev.concat([newPhoto.data]));
+    props.setCats((prev) => prev.concat([newPhoto.data]));
   }
 
   return (

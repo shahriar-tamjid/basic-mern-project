@@ -6,6 +6,10 @@ const {MongoClient} = require("mongodb");
 // Import the Express library by requiring it
 const express = require("express");
 
+// Setting "upload" variable equal to "Multer" in order to upload files
+const multer = require("multer");
+const upload = multer();
+
 // Initializing db variable
 let db;
 
@@ -18,6 +22,10 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 // Making the public folder available
 app.use(express.static("public"));
+// If browser is sending JSON data to the server, we can easily access that data
+app.use(express.json());
+// Insted of async request if browser submits plain HTML form we can easily access that data too
+app.use(express.urlencoded({extended: false}));
 
 // Authentication handler
 function passwordProtected(req, res, next) {
@@ -76,6 +84,24 @@ In the browser:
 [{"_id":"62d27dd008168ae62602d1f4","name":"Dustin","breed":"Birman"},
 {"_id":"62d27e0d08168ae62602d1f5","name":"Steve","breed":"Manie Coon"},
 {"_id":"62d27e3408168ae62602d1f6","name":"Max","breed":"Turkish Angora"}]
+*/
+
+// Route to pass data to the database
+app.post("/create-cat", upload.single("photo"), async (req, res) => {
+  // Before sendind data we want to check what browser is getting from its request
+  console.log(req.body);
+  // Our response
+  res.send("Thank You!");
+});
+
+/*
+In the console we have gotten:
+
+[Object: null prototype] {
+  photo: '',
+  name: 'Eleven',
+  breed: 'Exotic Shorthair'
+}
 */
 
 // Note: URL routes must be defined before we start listening to the port

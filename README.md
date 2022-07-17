@@ -43,3 +43,5 @@ npm install react react-dom @babel/core @babel/preset-react babel-loader webpack
 26. Link the CSS stylesheet from ```Bootstrap``` in the ```admin.ejs``` file
 27. Create a new file ```my-custom.css``` in the ```public``` folder and attach it to the ```admin.ejs```
 28. Style the UI of admin page using React in two files ```CatCard.js``` and ```CreateNewForm.js```
+
+29. Whenever we need to send files to the database we need to use a package named ```Multer``` To install it go to the terminal and type: ```npm install multer```
