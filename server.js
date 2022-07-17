@@ -19,6 +19,24 @@ app.set("views", "./views");
 // Making the public folder available
 app.use(express.static("public"));
 
+// Authentication handler
+function passwordProtected(req, res, next) {
+  res.set("WWW-Authenticate", "Basic realm='Basic MERN App'");
+  if(req.headers.authorization == "Basic YWRtaW46YWRtaW4=") {
+    // Here we will put the "Base-64" generated string according to our username and password
+    // If this string matches then user is authenticated
+    next(); // If user is authenticated then we are telling the Express to move onto next step or the third parameter
+  } else {
+    console.log(req.headers.authorization);
+    // With this we will get the "Base-64" encoded string for our username and password
+    // Then we can set that string equal to the "req.headers.authorization"
+    // Now we can log in successfully
+    res.status(401).send("You are not authorized! Try Again!"); // If the password is not matched then we show the error message
+  }
+}
+// This function is also called as a middleware
+// Because middleware the parameters that are given to a function which stays in the middle and performs task before getting to the third/later/final parameter
+
 // Let's practice querying the database when we place a get request to the homepage
 // For any task which requires to communicate with database or API we need to use async-await function
 app.get("/", async (req, res) => {
@@ -37,6 +55,11 @@ app.get("/", async (req, res) => {
 Here is the response in the browser:
 Hello I am the homepage template
 */
+
+// Except the home route we want all other routes to be password protected
+// So after the home route we need to call the app.use() and pass our auth function to that
+// By doing so any route that fall behind the app.use(passwordProtected), will require for the authorization
+app.use(passwordProtected);
 
 app.get("/admin", (req, res) => {
   res.render("admin");

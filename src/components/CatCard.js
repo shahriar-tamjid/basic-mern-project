@@ -42,7 +42,7 @@ function CatCard(props) {
 
   return (
     <div className="card">
-      <div className="card-body">
+      <div className="our-card-top">
         {isEditing && (
           <div className="our-custom-input">
             <div className="our-custom-input-interior">
@@ -65,8 +65,8 @@ function CatCard(props) {
       <div className="card-body">
         {!isEditing && (
           <>
-            <h4 className="card-title">{props.name}</h4>
-            <p className="card-text">{props.breed}</p>
+            <h2 className="card-title">{props.name}</h2>
+            <h5 className="card-text">{props.breed}</h5>
             {!props.readOnly && (
               <>
                 <button

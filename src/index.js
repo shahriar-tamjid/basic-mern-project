@@ -20,19 +20,27 @@ Now if we got to "localhost:3000/admin" we will see:
 A nice looking admin dashboard
 */
 
+  // Custom style for the Cat Card
+  const catCard = {
+    margin: "0 auto",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "20px 30px"
+  };
+
   return (
     <div className="container">
       <p>
         <a href="/">&laquo; Back to public homepage</a>
       </p>
       <CreateNewForm setCats={setCats} />
-      <div className="cat-grid">
+      <div style={catCard}>
         {cats.map(function (cat) {
           return (
             <CatCard
               key={cat._id}
               name={cat.name}
-              species={cat.species}
+              breed={cat.breed}
               photo={cat.photo}
               id={cat._id}
               setCats={setCats}
