@@ -40,3 +40,6 @@ npm install react react-dom @babel/core @babel/preset-react babel-loader webpack
 24. Now we can just go to the terminal and type ```npm run project``` and then both nodemon and webpack will start running
 
 25. To fetch and send data from React application we can go to terminal and type: ```npm install axios```
+26. Link the CSS stylesheet from ```Bootstrap``` in the ```admin.ejs``` file
+27. Create a new file ```my-custom.css``` in the ```public``` folder and attach it to the ```admin.ejs```
+28. Style the UI of admin page using React in two files ```CatCard.js``` and ```CreateNewForm.js```
