@@ -13,8 +13,18 @@ const upload = multer();
 // Import Sanitize HTML
 const sanitizeHTML = require("sanitize-html");
 
+// Import fs-extra and sharp
+const fse = require("fs-extra");
+const sharp = require("sharp");
+
+// Import the Path module to specify directory
+const path = require("path");
+
 // Initializing db variable
 let db;
+
+// When the app first launches, make sure the "public/uploaded-photos" folder exists
+fse.ensureDirSync(path.join("public", "uploaded-photos"));
 
 // Create an instance of express
 const app = express();
@@ -91,6 +101,12 @@ In the browser:
 
 // Route to pass data to the database
 app.post("/create-cat", upload.single("photo"), ourCleanup, async (req, res) => {
+  // Photo upload
+  if(req.file) {
+    const photoFileName = `${Date.now()}.jpg`;
+    await sharp(req.file.buffer).resize(844, 456).jpeg({quality: 60}).toFile(path.join("public", "uploaded-photos", photoFileName)); // Resizing photo
+    req.cleanData.photo = photoFileName; // Adding the file name to the object that we want to store in DB
+  }
   // Before sendind data we want to check what browser is getting from its request
   console.log(req.body);
   // Inserting data to MongoDB

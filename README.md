@@ -46,3 +46,6 @@ npm install react react-dom @babel/core @babel/preset-react babel-loader webpack
 
 29. Whenever we need to send files to the database we need to use a package named ```Multer``` To install it go to the terminal and type: ```npm install multer```
 30.  To cleanup data we need a package called ```Sanitize HTML``` To install it go to the terminal and type: ```npm install sanitize-html```
+
+31. To upload images we need to instruct the system to make a folder into the ```public``` directory and resize the image before storing there. To do so we will be needing two packages called ```fs-extra``` and ```sharp```
+32. ```fs-extra``` is a package to manage files and folders in Node app and ```sharp``` is a package to resize images. To install them go to the terminal and type: ```npm install fs-extra sharp```
