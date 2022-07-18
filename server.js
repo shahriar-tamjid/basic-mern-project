@@ -144,6 +144,27 @@ app.delete("/cat/:id", async (req, res) => {
   res.send("Successfully deleted!");
 })
 
+// Route to edit data on the database
+app.post("/update-cat", upload.single("photo"), ourCleanup, async (req, res) => {
+  if(req.file) {
+    // If they are uploading a new photo
+    // Copy and paste the photo upload section from "/create-cat" route
+    const photoFileName = `${Date.now()}.jpg`;
+    await sharp(req.file.buffer).resize(844, 456).jpeg({quality: 60}).toFile(path.join("public", "uploaded-photos", photoFileName)); // Resizing photo
+    req.cleanData.photo = photoFileName; // Adding the file name to the object that we want to store in DB
+    const info = await db.collection("cats").findOneAndUpdate({_id: new ObjectId(req.body._id)}, {$set: req.cleanData});
+    // If we want to remove the photo
+    if(info.value.photo) {
+      fse.remove(path.join("public", "uploaded-photos", info.value.photo));
+    }
+    res.send(photoFileName);
+  } else {
+    // If they are not uploading a photo
+    db.collection("cats").findOneAndUpdate({_id: new ObjectId(req.body._id)}, {$set: req.cleanData});
+    res.send(false);
+  }
+})
+
 // We need a data cleanup middleware to clean our data from garbage data or malicious inputs
 function ourCleanup(req, res, next) {
   if(typeof req.body.name != "string") req.body.name = "";
