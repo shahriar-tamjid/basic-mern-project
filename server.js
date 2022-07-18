@@ -129,6 +129,21 @@ In the console we have gotten:
 }
 */
 
+// Route to delete data from the database
+app.delete("/cat/:id", async (req, res) => {
+  // If the id is not a string then we will set it to an empty string
+  if(typeof req.params.id != "string") req.params.id = "";
+  // Find the photo of the target cat
+  const doc = await db.collection("cats").findOne({_id: new ObjectId(req.params.id)});
+  // Then remove the photo from the uploaded-photos directory
+  if(doc.photo) {
+    fse.remove(path.join("public", "uploaded-photos", doc.photo));
+  }
+  // Delete operation
+  db.collection("cats").deleteOne({_id: new ObjectId(req.params.id)});
+  res.send("Successfully deleted!");
+})
+
 // We need a data cleanup middleware to clean our data from garbage data or malicious inputs
 function ourCleanup(req, res, next) {
   if(typeof req.body.name != "string") req.body.name = "";
