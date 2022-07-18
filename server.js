@@ -23,6 +23,11 @@ const path = require("path");
 // Initializing db variable
 let db;
 
+// Import React and CatCard to render them into the server
+const React = require("react");
+const ReactDOMServer = require("react-dom/server");
+const CatCard = require("./src/components/CatCard").default; // To avoid complexities of ES6+
+
 // When the app first launches, make sure the "public/uploaded-photos" folder exists
 fse.ensureDirSync(path.join("public", "uploaded-photos"));
 
@@ -58,24 +63,34 @@ function passwordProtected(req, res, next) {
 // This function is also called as a middleware
 // Because middleware the parameters that are given to a function which stays in the middle and performs task before getting to the third/later/final parameter
 
-// Let's practice querying the database when we place a get request to the homepage
-// For any task which requires to communicate with database or API we need to use async-await function
+
+// Home Route
 app.get("/", async (req, res) => {
+  // DB query to fetch data
   const allCats = await db.collection("cats").find().toArray();
-  // Here we are storing all the data that are stored in a collection named "cats"
-  // find() method will return all the data from the collection by that return value is difficult for us to read
-  // So we converted it into an array for our convenience
 
-  // It's not a good thing to write HTML template inside of a send() method because it gets unmanageable with time
-  // We can use a template engine called "ejs" to keep things clean
-  res.render("home", {allCats});
-  // If we pass a parameter to this render() method, we will be able to access that into our home.ejs file
+  // Custom style for the Cat Card
+  const catCard = {
+    margin: "0 auto",
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "20px 30px"
+  };
+  
+  // Generating HTML template
+  const generatedHTML = ReactDOMServer.renderToString(
+    <div className="container">
+      <br /> <br /> <br />
+      {!allCats.length && <h3>There are no cats yet, the admin need to add a few</h3>}
+      <div style={catCard}>
+        {allCats.map(cat => <CatCard key={cat._id} name={cat.name} breed={cat.breed} photo={cat.photo} id={cat._id} readOnly={true} />)}
+      </div>
+      <br />
+      <h4><a href="/admin">Login / manage the cat listings</a></h4>
+    </div>
+  );
+  res.render("home", {generatedHTML});
 });
-
-/*
-Here is the response in the browser:
-Hello I am the homepage template
-*/
 
 // Except the home route we want all other routes to be password protected
 // So after the home route we need to call the app.use() and pass our auth function to that

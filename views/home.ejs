@@ -1,19 +1,21 @@
-<!-- The ejs syntax is very complex -->
-<!-- There is no alternate for ejs documentation: https://ejs.co/#docs -->
-
-<h1>Welcome to the Homepage!</h1>
-
-<ul>
-  <% allCats.forEach(function(cat) { %>
-  <li>Name: <%= cat.name %> ... Breed: <%= cat.breed %></li>
-  <% }); %>
-</ul>
-
-<!-- This will dynamically generate a page with fetched data from MongoDB -->
-<!-- The output will look like this:
-Welcome to the Homepage!
-
-Name: Dustin ... Breed: Birman
-Name: Steve ... Breed: Manie Coon
-Name: Max ... Breed: Turkish Angora 
--->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/my-custom.css" />
+  </head>
+  <body>
+    <!-- Using the generated HTML here with ejs -->
+    <%- generatedHTML %>
+  </body>
+</html>
