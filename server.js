@@ -45,25 +45,6 @@ app.use(express.json());
 // Insted of async request if browser submits plain HTML form we can easily access that data too
 app.use(express.urlencoded({extended: false}));
 
-// Authentication handler
-function passwordProtected(req, res, next) {
-  res.set("WWW-Authenticate", "Basic realm='Basic MERN App'");
-  if(req.headers.authorization == "Basic YWRtaW46YWRtaW4=") {
-    // Here we will put the "Base-64" generated string according to our username and password
-    // If this string matches then user is authenticated
-    next(); // If user is authenticated then we are telling the Express to move onto next step or the third parameter
-  } else {
-    console.log(req.headers.authorization);
-    // With this we will get the "Base-64" encoded string for our username and password
-    // Then we can set that string equal to the "req.headers.authorization"
-    // Now we can log in successfully
-    res.status(401).send("You are not authorized! Try Again!"); // If the password is not matched then we show the error message
-  }
-}
-// This function is also called as a middleware
-// Because middleware the parameters that are given to a function which stays in the middle and performs task before getting to the third/later/final parameter
-
-
 // Home Route
 app.get("/", async (req, res) => {
   // DB query to fetch data
@@ -86,19 +67,60 @@ app.get("/", async (req, res) => {
         {allCats.map(cat => <CatCard key={cat._id} name={cat.name} breed={cat.breed} photo={cat.photo} id={cat._id} readOnly={true} />)}
       </div>
       <br />
-      <h4><a href="/admin">Login / manage the cat listings</a></h4>
+      <h4><a href="/auth/login">Login / manage the cat listings</a></h4>
     </div>
   );
   res.render("home", {generatedHTML});
 });
 
-// Except the home route we want all other routes to be password protected
-// So after the home route we need to call the app.use() and pass our auth function to that
-// By doing so any route that fall behind the app.use(passwordProtected), will require for the authorization
-app.use(passwordProtected);
-
+// Admin Route
 app.get("/admin", (req, res) => {
   res.render("admin");
+});
+
+// Login Route GET method
+app.get("/auth/:method?", function (req, res, next) {
+  if (req.params.method == "login" || req.params.method == "signin") {
+    res.render("auth", {method: "login"});
+  } else if (req.params.method == "register" || req.params.method == "signup") {
+    res.render("auth", {method: "register"});
+  }
+});
+
+// Login Route POST method
+app.post("/auth/:method?", ourCleanup, async function (req, res) {
+  if (req.params.method == "login" || req.params.method == "signin") {
+    const allUsers = await db.collection("users").find().toArray();
+    console.log(allUsers);
+    console.log(req.body.name);
+    console.log(req.body.password);
+
+    const userNameArray = [];
+    const userPasswordArray = [];
+    
+    allUsers.forEach(user => userNameArray.push(user.name));
+    console.log(userNameArray);
+    allUsers.forEach(user => userPasswordArray.push(user.password));
+    console.log(userPasswordArray);
+
+    for (let i = 0; i < userNameArray.length; i++) {
+      if (req.body.name == userNameArray[i]) {
+        for (let j = 0; j < userPasswordArray.length; j++) {
+          if (req.body.password == userPasswordArray[j]) {
+            res.redirect('/admin');
+          }
+        }
+      }
+    }
+    // res.send("To access the admin page you must register first!");
+    
+  } else if (req.params.method == "register" || req.params.method == "signup") {
+    // Inserting data to MongoDB
+    const info = await db.collection("users").insertOne(req.cleanUserData);
+    const newUser = await db.collection("users").findOne({_id: new ObjectId(info.insertedId)})
+    
+    res.redirect("/auth/login");
+  }
 });
 
 // To pass the data to React code we need to get the data from database in JSON format
@@ -185,10 +207,16 @@ function ourCleanup(req, res, next) {
   if(typeof req.body.name != "string") req.body.name = "";
   if(typeof req.body.breed != "string") req.body.breed = "";
   if(typeof req.body._id != "string") req.body._id = "";
+  if(typeof req.body.password != "string") req.body.password = "";
 
   req.cleanData = {
     name: sanitizeHTML(req.body.name.trim(), {allowedTags: [], allowedAttributes: {}}),
     breed: sanitizeHTML(req.body.breed.trim(), {allowedTags: [], allowedAttributes: {}})
+  }
+
+  req.cleanUserData = {
+    name: sanitizeHTML(req.body.name.trim(), {allowedTags: [], allowedAttributes: {}}),
+    password: sanitizeHTML(req.body.password.trim(), {allowedTags: [], allowedAttributes: {}})
   }
 
   next();
